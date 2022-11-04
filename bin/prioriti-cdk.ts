@@ -1,6 +1,10 @@
 #!/usr/bin/env node
-import * as cdk from 'aws-cdk-lib';
-import { PrioritiCdkStack } from '../lib/prioriti-cdk-stack';
+import { App } from "aws-cdk-lib";
+import { PrioritiCdkStack } from "../lib/prioriti-cdk-stack";
+import AppBuilder from "../src/appBuilder";
 
-const app = new cdk.App();
-new PrioritiCdkStack(app, 'PrioritiCdkStack');
+const appBuilder = new AppBuilder();
+const config = appBuilder.getConfig();
+appBuilder.build({
+  description: "The infrastructure for the Prioriti app",
+});
