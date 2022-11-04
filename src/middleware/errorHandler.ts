@@ -1,4 +1,4 @@
-import middy from "@middy/core";
+import middy from '@middy/core';
 
 interface HttpError extends Error {
   statusCode: number;
@@ -11,23 +11,23 @@ interface ErrorHandlerOptions {
 }
 
 export const defaultOptions: Required<ErrorHandlerOptions> = {
-  fallbackMessage: "An unexpected error occurred",
+  fallbackMessage: 'An unexpected error occurred'
 };
 
-const isHttpError = (error: Error): error is HttpError => "statusCode" in error;
+const isHttpError = (error: Error): error is HttpError => 'statusCode' in error;
 
 function errorHandler(errorHandlerOptions?: ErrorHandlerOptions) {
   const options: Required<ErrorHandlerOptions> = {
     ...defaultOptions,
-    ...errorHandlerOptions,
+    ...errorHandlerOptions
   };
 
   const onError = (request: middy.Request) => {
     // the default error response
     const errorResponse = {
       error: {
-        message: options.fallbackMessage,
-      },
+        message: options.fallbackMessage
+      }
     };
     let statusCode = 500;
 
@@ -46,8 +46,8 @@ function errorHandler(errorHandlerOptions?: ErrorHandlerOptions) {
       statusCode,
       body: JSON.stringify(errorResponse),
       headers: {
-        "Content-Type": "application/json",
-      },
+        'Content-Type': 'application/json'
+      }
     };
 
     request.response = response;
@@ -56,7 +56,7 @@ function errorHandler(errorHandlerOptions?: ErrorHandlerOptions) {
   };
 
   return {
-    onError,
+    onError
   };
 }
 

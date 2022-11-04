@@ -1,5 +1,5 @@
-import { readFileSync } from "fs";
-import { load } from "js-yaml";
+import { readFileSync } from 'fs';
+import { load } from 'js-yaml';
 
 /**
  * Reads a YAML file and returns it as a JavaScript object.
@@ -7,5 +7,5 @@ import { load } from "js-yaml";
  * @returns
  */
 export function readYaml(file: string) {
-  return load(readFileSync(file, "utf8"));
+  return load(readFileSync(file, 'utf8'));
 }

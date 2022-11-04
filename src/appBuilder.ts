@@ -1,8 +1,8 @@
-import { App } from "aws-cdk-lib";
-import PriorityStackProps from "./interface";
-import { join } from "path";
-import { PrioritiCdkStack } from "../lib/prioriti-cdk-stack";
-import { readYaml } from "./helpers";
+import { App } from 'aws-cdk-lib';
+import PriorityStackProps from './interface';
+import { join } from 'path';
+import { PrioritiCdkStack } from '../lib/prioriti-cdk-stack';
+import { readYaml } from './helpers';
 
 interface IAppBuilderOptions {
   configDirectory: string;
@@ -11,9 +11,9 @@ interface IAppBuilderOptions {
 }
 
 const defaultOptions: IAppBuilderOptions = {
-  configDirectory: "./config",
-  prodConfigFile: "prod.yaml",
-  devConfigFile: "dev.yaml",
+  configDirectory: './config',
+  prodConfigFile: 'prod.yaml',
+  devConfigFile: 'dev.yaml'
 };
 
 export default class<T> {
@@ -35,6 +35,6 @@ export default class<T> {
   }
 
   build(props: PriorityStackProps) {
-    new PrioritiCdkStack(this.app, "PrioritiCdkStack", props);
+    new PrioritiCdkStack(this.app, 'PrioritiCdkStack', props);
   }
 }

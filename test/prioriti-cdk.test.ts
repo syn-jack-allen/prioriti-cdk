@@ -1,8 +1,8 @@
-import * as cdk from "aws-cdk-lib";
-import { Template, Match } from "aws-cdk-lib/assertions";
-import * as PrioritiCdk from "../lib/prioriti-cdk-stack";
+import * as cdk from 'aws-cdk-lib';
+import { Template, Match } from 'aws-cdk-lib/assertions';
+import * as PrioritiCdk from '../lib/prioriti-cdk-stack';
 
-test("SQS Queue and SNS Topic Created", () => {
+test('SQS Queue and SNS Topic Created', () => {
   // const app = new cdk.App();
   // // WHEN
   // const stack = new PrioritiCdk.PrioritiCdkStack(app, 'MyTestStack');
