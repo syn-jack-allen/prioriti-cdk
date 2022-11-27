@@ -9,7 +9,7 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write ./src"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.108",
