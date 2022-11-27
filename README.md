@@ -1,14 +1,24 @@
-# Welcome to your CDK TypeScript project
+# Welcome to the Prioriti project
 
-You should explore the contents of this project. It demonstrates a CDK app with an instance of a stack (`PrioritiCdkStack`)
-which contains an Amazon SQS queue that is subscribed to an Amazon SNS topic.
+This repo is intended to demonstrate professional DevOps practices that take a project from conception all the way to production.
+These practices include
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+- Git branch protections with GitHub Actions for CI/CD
+- Unit testing, integration testing and e2e testing
+- IaC
+- Logging and observability principles
+- Automatic documentation deployment to Confluence
+
+The project itself is a simple To Do app where each task is dropped into a priority queue data structure which will hopefully hlp me to complete my daily errands.
+
+Sadly, not a revolutionary idea but it is simple enough to be an achievable goal whilst adhering to professional DevOps practices. This app is intended to be deployed into the AWS Cloud, making use of lambdas Dynamo DB. Initially, the UI will be a web app using the React's latest competitor, Solid.js.
+
+Since I won't be carrying my tower PC around with me throughout the day, there are some plans to explore creating a mobile app, prehaps picking up a new language along the way, such as Dart.
+
+Hopefully, this README will be updated as the project progresses.
 
 ## Useful commands
 
-- `npm run build` compile typescript to js
-- `npm run watch` watch for changes and compile
 - `npm run test` perform the jest unit tests
 - `cdk deploy` deploy this stack to your default AWS account/region
 - `cdk diff` compare deployed stack with current state
