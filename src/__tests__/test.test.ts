@@ -3,6 +3,7 @@ describe('a test for github actions CI', () => {
     expect(1).toBe(1);
   });
   test('a failing test', () => {
+    // change test comment
     expect(1).toBe(2);
   });
 });
