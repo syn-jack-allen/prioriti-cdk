@@ -1,22 +1,18 @@
 import { Duration, Stack, StackProps } from 'aws-cdk-lib';
-import { Topic } from 'aws-cdk-lib/aws-sns';
-import { SqsSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
-import { Queue } from 'aws-cdk-lib/aws-sqs';
+import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
-import PriorityStackProps from '../src/interface';
+import { join } from 'path';
+import { PrioritiStackProps } from '../src/interface';
 
 export class PrioritiCdkStack extends Stack {
-  constructor(scope: Construct, id: string, props: PriorityStackProps) {
+  constructor(scope: Construct, id: string, props: PrioritiStackProps) {
     super(scope, id, props);
 
-    const queue = new Queue(this, 'PrioritiCdkQueue', {
-      visibilityTimeout: Duration.seconds(
-        props.prioritiCdkQueue.visibilityTimeout
-      )
+    const helloWorldLambdaProps = props.helloWorldLambda;
+    const helloWorldLambda = new Function(this, 'HelloWorldLambda', {
+      runtime: Runtime.NODEJS_16_X,
+      code: Code.fromAsset(join(__dirname, '..', helloWorldLambdaProps.code)),
+      handler: helloWorldLambdaProps.handler
     });
-
-    const topic = new Topic(this, 'PrioritiCdkTopic');
-
-    topic.addSubscription(new SqsSubscription(queue));
   }
 }

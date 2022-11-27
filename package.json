@@ -12,6 +12,7 @@
     "prettier": "prettier --write ."
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.108",
     "@types/jest": "^27.5.2",
     "@types/js-yaml": "^4.0.5",
     "@types/node": "10.17.27",
@@ -29,6 +30,7 @@
     "@middy/http-header-normalizer": "^3.6.2",
     "@middy/validator": "^3.6.2",
     "aws-cdk-lib": "2.43.1",
+    "aws-lambda": "^1.0.7",
     "constructs": "^10.0.0",
     "js-yaml": "^4.1.0"
   }

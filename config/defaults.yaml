@@ -1,0 +1,3 @@
+helloWorldLambda:
+  code: '/src/lambda'
+  handler: 'index.handler'
