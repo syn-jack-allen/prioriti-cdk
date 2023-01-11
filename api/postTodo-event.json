@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "required": ["body"],
+  "properties": {
+    "body": {
+      "type": "object",
+      "required": ["summary", "deadline"],
+      "properties": {
+        "summary": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deadline": {
+          "type": "string",
+          "pattern": "^\\\\d{4}\\\\-(0?[1-9]|1[012])\\\\-(0?[1-9]|[12][0-9]|3[01])$"
+        },
+        "color": {
+          "type": "string",
+          "enum": ["red", "blue", "green"]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

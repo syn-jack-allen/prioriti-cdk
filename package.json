@@ -7,14 +7,18 @@
   "scripts": {
     "test": "jest",
     "cdk": "cdk",
+    "deploy": "cdk deploy --profile personal -c env=prod -c region=eu-west-2",
     "prettier": "prettier --write ./src"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.108",
     "@types/jest": "^27.5.2",
     "@types/js-yaml": "^4.0.5",
+    "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "10.17.27",
     "@types/prettier": "2.6.0",
+    "@types/serialize-error": "^4.0.1",
+    "@types/uuid": "^9.0.0",
     "aws-cdk": "2.43.1",
     "eslint-config-prettier": "^8.5.0",
     "jest": "^27.5.1",
@@ -24,12 +28,25 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
+    "@aws-cdk/aws-apigatewayv2": "^1.182.0",
+    "@aws-cdk/aws-apigatewayv2-alpha": "^2.54.0-alpha.0",
+    "@aws-cdk/aws-apigatewayv2-authorizers": "^1.182.0",
+    "@aws-cdk/aws-apigatewayv2-authorizers-alpha": "^2.54.0-alpha.0",
+    "@aws-cdk/aws-apigatewayv2-integrations-alpha": "^2.54.0-alpha.0",
+    "@aws-lambda-powertools/logger": "^1.5.0",
     "@middy/core": "^3.6.2",
+    "@middy/http-event-normalizer": "^4.0.10",
     "@middy/http-header-normalizer": "^3.6.2",
+    "@middy/http-json-body-parser": "^4.0.10",
+    "@middy/http-response-serializer": "^4.0.10",
+    "@middy/http-security-headers": "^4.0.10",
     "@middy/validator": "^3.6.2",
     "aws-cdk-lib": "2.43.1",
     "aws-lambda": "^1.0.7",
     "constructs": "^10.0.0",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "serialize-error": "^11.0.0",
+    "uuid": "^9.0.0"
   }
 }

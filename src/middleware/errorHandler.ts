@@ -5,6 +5,10 @@ interface HttpError extends Error {
   expose?: boolean;
 }
 
+interface ErrorLogger {
+  error: (msg: string, err: Error) => void;
+}
+
 interface ErrorHandlerOptions {
   // the message that is displayed if the underlying error message shouldn't be exposed
   fallbackMessage?: string;
@@ -40,19 +44,10 @@ function errorHandler(errorHandlerOptions?: ErrorHandlerOptions) {
         errorResponse.error.message = error.message;
     }
 
-    // default error for unexpected runtime errors
-
-    const response = {
+    request.response = {
       statusCode,
-      body: JSON.stringify(errorResponse),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      body: errorResponse
     };
-
-    request.response = response;
-
-    return request.response;
   };
 
   return {

@@ -1,0 +1,6 @@
+helloWorldLambda:
+  code: '/src/lambda'
+  handler: 'handler'
+  entry: './src/lambda/helloWorld/index.ts'
+  timeout: 30
+  memorySize: 1024

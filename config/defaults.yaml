@@ -1,3 +1,44 @@
+apiGateway:
+  jwtIssuer: 'https://dev-5k08t45j1chz5c4k.us.auth0.com/'
 helloWorldLambda:
-  code: '/src/lambda'
-  handler: 'index.handler'
+  id: 'HelloWorld'
+  description: 'Return a simple test response'
+  handler: 'handler'
+  entry: './src/lambda/helloWorld/index.ts'
+  timeout: 3
+  memorySize: 1024
+getTodoLambdaProps:
+  id: 'GetTodo'
+  description: 'Get a single todo item of a user'
+  handler: 'handler'
+  entry: './src/lambda/todo/get/index.ts'
+  timeout: 3
+  memorySize: 1024
+getAllTodoLambdaProps:
+  id: 'GetAllTodo'
+  description: 'Get all todo items of a user'
+  handler: 'handler'
+  entry: './src/lambda/todo/getAll/index.ts'
+  timeout: 3
+  memorySize: 1024
+deleteTodoLambdaProps:
+  id: 'DeleteTodo'
+  description: 'Delete a single todo item of a user'
+  handler: 'handler'
+  entry: './src/lambda/todo/delete/index.ts'
+  timeout: 3
+  memorySize: 1024
+putTodoLambdaProps:
+  id: 'PutTodo'
+  description: 'Update a single todo item of a user'
+  handler: 'handler'
+  entry: './src/lambda/todo/put/index.ts'
+  timeout: 3
+  memorySize: 1024
+postTodoLambdaProps:
+  id: 'PostTodo'
+  description: 'Create a single todo item for a user'
+  handler: 'handler'
+  entry: './src/lambda/todo/post/index.ts'
+  timeout: 3
+  memorySize: 1024

@@ -1,0 +1,140 @@
+openapi: '3.1.0'
+info:
+  title: 'Prioriti API'
+  description: 'A CRUD API for interacting with todo items of the Prioriti app.'
+  version: '1.0.0'
+servers:
+  - url: 'https://dev.prioriti.com/v1'
+    description: 'The version of the API that is under development.'
+  - url: 'https://api.prioriti.com/v1'
+    description: 'The version of the API that is in production.'
+paths:
+  '/user/{userId}/todo':
+    summary: 'Used for performing CRUD operations on todo items.'
+    parameters:
+      - name: 'userId'
+        in: 'path'
+        description: 'Used to identify the user.'
+        schema:
+          type: 'string'
+    get:
+      summary: 'Used to retrieve all the todo items of a single user.'
+      description: 'Detailed description'
+      parameters:
+        - name: 'pageNumber'
+          in: 'query'
+          description: 'Used for pagination. Indicates the page number to return.'
+          schema:
+            type: 'number'
+            minimum: 0
+        - name: 'pageSize'
+          in: 'query'
+          description: 'Used for pagination. Indicates the number of results to return per page.'
+          schema:
+            type: 'number'
+            minimum: 1
+      security:
+        - todoAuth:
+            - 'read:todo'
+    post:
+      summary: 'Used to create a new todo item for a single user.'
+      description: 'Requires a summary and deadline, and optionally a description and color to create a new todo item for a single user.'
+      requestBody:
+        description: 'The body containing a summary and deadline, and optionally a description and color to create a new todo item for a single user.'
+        content:
+          'application/json':
+            schema:
+              $ref: 'todoList.yaml'
+      security:
+        - todoAuth:
+            - 'write:todo'
+  '/user/{userId}/todo/{todoId}':
+    summary: 'Used for getting, updating and deleting a particular todo item for a single user.'
+    parameters:
+      - name: 'userId'
+        in: 'path'
+        description: 'Used to identify the user.'
+        schema:
+          type: 'string'
+      - name: 'todoId'
+        in: 'path'
+        description: 'Used to identify the todo item.'
+        schema:
+          type: 'string'
+    get:
+      summary: 'Used for getting a particular todo item of a single user.'
+      description: 'Gets the todo item of a given ID, of a single user and returns all the information about it. This includes the summary, description, deadline and color.'
+      security:
+        - todoAuth:
+            - 'read:todo'
+      responses:
+        '200':
+          description: 'The found todo item.'
+          content:
+            'application/json':
+              schema:
+                type: 'object'
+                properties:
+                  summary:
+                    type: 'string'
+                    description: 'The short text summary of what the todo item is about.'
+                  description:
+                    type: 'string'
+                    description: 'A complete text description of what the todo item is about.'
+                  deadline:
+                    type: 'string'
+                    description: 'The deadline that the todo item should be completed by.'
+                    pattern: '^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$'
+                  color:
+                    type: 'enum'
+                    description: 'The color of the todo item card.'
+                    allowedValues:
+                      - 'red'
+                      - 'blue'
+                      - 'green'
+                required:
+                  - 'summary'
+                  - 'deadline'
+        '404':
+          description: 'When a todo item with the given ID does not exist.'
+    delete:
+      summary: 'Used for deleting a particular todo item of a single user.'
+      description: 'Deletes the todo item of a given ID, of a single user.'
+      security:
+        - todoAuth:
+            - 'delete:todo'
+      responses:
+        '200':
+          description: 'If the todo item is successfully deleted, or does not exist.'
+    put:
+      summary: 'Used for updating a particular todo item of a single user.'
+      description: 'Updates the todo item of a given ID, of a single user with the content from the request body. This could be the summary, description, deadline and/or color.'
+      security:
+        - todoAuth:
+            - 'write:todo'
+      requestBody:
+        description: 'The body containing any number of the properties summary, description, deadline or color. If the body contains the property, then that property is updated to the new value.'
+        content:
+          'application/json':
+            schema:
+              type: 'object'
+              minProperties: 1
+              properties:
+                summary:
+                  type: 'string'
+                description:
+                  type: 'string'
+                deadline:
+                  type: 'string'
+                  pattern: '^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$'
+                color:
+                  type: 'enum'
+                  allowedValues:
+                    - 'red'
+                    - 'blue'
+                    - 'green'
+      responses:
+        '200':
+          description: 'If the todo item was successfully updated.'
+        '404':
+          description: 'When a todo item with the given ID does not exist.'

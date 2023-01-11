@@ -1,5 +1,5 @@
 import { App } from 'aws-cdk-lib';
-import PriorityStackProps from './interface';
+import PriorityStackProps from '../lib/interface';
 import { join } from 'path';
 import { PrioritiCdkStack } from '../lib/prioriti-cdk-stack';
 import { readYaml } from './helpers';
