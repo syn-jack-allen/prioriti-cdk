@@ -2,5 +2,8 @@ helloWorldLambda:
   code: '/src/lambda'
   handler: 'handler'
   entry: './src/lambda/helloWorld/index.ts'
+<<<<<<< HEAD
   timeout: 30
   memorySize: 1024
+=======
+>>>>>>> 0cf7186 (prod yaml)
