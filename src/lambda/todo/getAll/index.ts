@@ -1,15 +1,15 @@
 import middy from '@middy/core';
-import { APIGatewayEvent, Context } from 'aws-lambda';
-import { GetAllTodoResponse } from '../../../interfaces/Todo';
-import { v4 as uuid } from 'uuid';
-import httpHeaderNormalizer from '@middy/http-header-normalizer';
-import { errorHandler } from '../../../middleware/errorHandler';
-import httpResponseSerializer from '@middy/http-response-serializer';
 import httpEventNormalizer from '@middy/http-event-normalizer';
-import { httpLogger } from '../../../middleware/httpLogger';
-import { logger } from '../../../constants';
+import httpHeaderNormalizer from '@middy/http-header-normalizer';
+import httpResponseSerializer from '@middy/http-response-serializer';
 import validator from '@middy/validator';
+import { APIGatewayEvent, Context } from 'aws-lambda';
+import { v4 as uuid } from 'uuid';
 import responseSchema from '../../../../api/getAllTodo-response.json';
+import { logger } from '../../../constants';
+import { GetAllTodoResponse } from '../../../interfaces/Todo';
+import { errorHandler } from '../../../middleware/errorHandler';
+import { httpLogger } from '../../../middleware/httpLogger';
 
 async function baseHandler(
   event: APIGatewayEvent,
@@ -39,7 +39,7 @@ async function baseHandler(
           summary: 'Another summary',
           description: 'Another shorter description',
           deadline: '2023-04-12',
-          color: ''
+          color: 'blue'
         },
         {
           id: uuid(),

@@ -84,7 +84,6 @@ paths:
                   deadline:
                     type: 'string'
                     description: 'The deadline that the todo item should be completed by.'
-                    pattern: '^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$'
                   color:
                     type: 'enum'
                     description: 'The color of the todo item card.'
@@ -126,7 +125,6 @@ paths:
                   type: 'string'
                 deadline:
                   type: 'string'
-                  pattern: '^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$'
                 color:
                   type: 'enum'
                   allowedValues:
