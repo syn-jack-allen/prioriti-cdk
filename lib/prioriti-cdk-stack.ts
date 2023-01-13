@@ -1,20 +1,20 @@
-import { Duration, ResourceEnvironment, Stack } from 'aws-cdk-lib';
+import { HttpMethod } from '@aws-cdk/aws-apigatewayv2';
 import {
   DomainName,
   HttpApi,
   PayloadFormatVersion
 } from '@aws-cdk/aws-apigatewayv2-alpha';
-import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
-import { Construct } from 'constructs';
-import { PrioritiStackProps, PrioritiLambdaProps } from './interface';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { HttpMethod } from '@aws-cdk/aws-apigatewayv2';
 import { HttpJwtAuthorizer } from '@aws-cdk/aws-apigatewayv2-authorizers-alpha';
-import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
+import { Duration, ResourceEnvironment, Stack } from 'aws-cdk-lib';
 import { DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
-import { ApiGatewayv2DomainProperties } from 'aws-cdk-lib/aws-route53-targets';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { ApiGatewayv2DomainProperties } from 'aws-cdk-lib/aws-route53-targets';
+import { Construct } from 'constructs';
+import { PrioritiLambdaProps, PrioritiStackProps } from './interface';
 
 const createNodeJsFunction = (stack: Stack, props: PrioritiLambdaProps) =>
   new NodejsFunction(stack, props.id, {
@@ -110,13 +110,13 @@ export class PrioritiCdkStack extends Stack {
 
     const issuer = props.apiGateway.jwtIssuer;
     const apiAuthorizer = new HttpJwtAuthorizer('ApiAuthorizer', issuer, {
-      jwtAudience: ['https://dev-5k08t45j1chz5c4k.us.auth0.com/api/v2/']
+      jwtAudience: ['https://api.prioriti.plus']
     });
 
     const api = new HttpApi(this, 'PrioritiAPI', {
       description: 'The API for calling the hello world lambda',
-      disableExecuteApiEndpoint: true
-      // defaultAuthorizer: apiAuthorizer
+      disableExecuteApiEndpoint: true,
+      defaultAuthorizer: apiAuthorizer
     });
 
     const devStage = api.addStage('dev', {
