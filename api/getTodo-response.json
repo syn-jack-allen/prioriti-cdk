@@ -1,12 +1,9 @@
 {
   "type": "object",
-  "required": ["statusCode", "headers", "body"],
+  "required": ["statusCode", "body"],
   "properties": {
     "statusCode": {
       "type": "integer"
-    },
-    "headers": {
-      "type": "object"
     },
     "body": {
       "type": "object",

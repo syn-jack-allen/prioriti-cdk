@@ -1,0 +1,8 @@
+{
+  "type": "object",
+  "properties": {
+    "body": {
+      "type": "object"
+    }
+  }
+}
