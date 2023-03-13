@@ -9,11 +9,11 @@ These practices include
 - Logging and observability principles
 - Automatic documentation deployment to Confluence
 
-The project itself is a simple To Do app where each task is dropped into a priority queue data structure which will hopefully hlp me to complete my daily errands.
+The project itself is a simple To Do app where each task is dropped into a priority queue type of data structure which will hopefully help me to complete my daily errands.
 
-Sadly, not a revolutionary idea but it is simple enough to be an achievable goal whilst adhering to professional DevOps practices. This app is intended to be deployed into the AWS Cloud, making use of lambdas Dynamo DB. Initially, the UI will be a web app using the React's latest competitor, Solid.js.
+Sadly, not a revolutionary idea but it is simple enough to be an achievable goal whilst adhering to professional DevOps practices. This app is intended to be deployed into the AWS Cloud, making use of Lambda, DynamoDB and API Gateway. To interact with this app, checkout `prioriti-web` for the NextJS web app.
 
-Since I won't be carrying my tower PC around with me throughout the day, there are some plans to explore creating a mobile app, prehaps picking up a new language along the way, such as Dart.
+Since I won't be carrying my tower PC around with me throughout the day, there are some plans to explore creating a mobile app, prehaps picking up a new language along the way, such as Dart with the Flutter framework.
 
 Hopefully, this README will be updated as the project progresses.
 
