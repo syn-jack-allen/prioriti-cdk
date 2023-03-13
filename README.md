@@ -23,3 +23,7 @@ Hopefully, this README will be updated as the project progresses.
 - `cdk deploy` deploy this stack to your default AWS account/region
 - `cdk diff` compare deployed stack with current state
 - `cdk synth` emits the synthesized CloudFormation template
+
+## Deploying
+
+To deploy, run `cdk deploy`. This will use the configuration under the profile named 'personal'.
