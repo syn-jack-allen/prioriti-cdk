@@ -4,7 +4,7 @@ This repo is intended to demonstrate professional DevOps practices that take a p
 These practices include
 
 - Git branch protections with GitHub Actions for CI/CD
-- Unit testing, integration testing and e2e testing
+- Unit, integration and e2e testing
 - IaC
 - Logging and observability principles
 - Automatic documentation deployment to Confluence
