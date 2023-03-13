@@ -1,4 +1,4 @@
-import { HttpMethod } from '@aws-cdk/aws-apigatewayv2';
+import { CorsHttpMethod, HttpMethod } from '@aws-cdk/aws-apigatewayv2';
 import {
   DomainName,
   HttpApi,
@@ -144,6 +144,7 @@ export class PrioritiCdkStack extends Stack {
     );
 
     const issuer = props.apiGateway.jwtIssuer;
+    const allowOrigins = props.apiGateway.allowOrigins;
     const apiAuthorizer = new HttpJwtAuthorizer('ApiAuthorizer', issuer, {
       jwtAudience: ['https://api.prioriti.plus']
     });
@@ -151,7 +152,15 @@ export class PrioritiCdkStack extends Stack {
     const api = new HttpApi(this, 'PrioritiAPI', {
       description: 'The API for calling the hello world lambda',
       disableExecuteApiEndpoint: true,
-      defaultAuthorizer: apiAuthorizer
+      defaultAuthorizer: apiAuthorizer,
+      corsPreflight: {
+        allowCredentials: true,
+        allowHeaders: ['*'],
+        allowMethods: [CorsHttpMethod.ANY],
+        allowOrigins,
+        exposeHeaders: ['*'],
+        maxAge: Duration.seconds(60 * 60 * 2)
+      }
     });
 
     const devStage = api.addStage('dev', {
