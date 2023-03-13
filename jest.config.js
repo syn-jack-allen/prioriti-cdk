@@ -1,9 +1,9 @@
 module.exports = {
+  preset: 'ts-jest',
   testEnvironment: 'node',
   testMatch: ['**/*.test.ts'],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest',
-    '^.+\\.jsx?$': 'babel-jest'
+    '^.+\\.tsx?$': 'ts-jest'
   },
-  transformIgnorePatterns: ['prioriti-cdk/node_modules/@middy/']
+  transformIgnorePatterns: ['./node_modules/@middy/']
 };
