@@ -8,6 +8,15 @@ export interface Todo {
   color: string;
 }
 
+export interface DynamoTodo {
+  PK: string;
+  SK: string;
+  Summary: string;
+  Description: string;
+  Deadline: string;
+  Color: string;
+}
+
 export interface Pagination {
   pageNumber: number;
   pageSize: number;
@@ -30,4 +39,22 @@ export interface GetAllTodoResponseBody extends Pagination {
 export interface GetAllTodoResponse
   extends Omit<APIGatewayProxyStructuredResultV2, 'body'> {
   body: GetAllTodoResponseBody;
+}
+
+export interface PostTodoResponseBody {
+  todoId: string;
+}
+
+export interface PostTodoResponse
+  extends Omit<APIGatewayProxyStructuredResultV2, 'body'> {
+  body: PostTodoResponseBody;
+}
+
+export interface PutTodoResponseBody {
+  data: Todo;
+}
+
+export interface PutTodoResponse
+  extends Omit<APIGatewayProxyStructuredResultV2, 'body'> {
+  body: PutTodoResponseBody;
 }

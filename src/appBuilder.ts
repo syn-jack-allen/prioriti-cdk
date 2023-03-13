@@ -1,6 +1,6 @@
 import { App } from 'aws-cdk-lib';
-import PriorityStackProps from '../lib/interface';
 import { join } from 'path';
+import { PrioritiStackProps } from '../lib/interface';
 import { PrioritiCdkStack } from '../lib/prioriti-cdk-stack';
 import { readYaml } from './helpers';
 
@@ -34,7 +34,7 @@ export default class<T> {
     return config;
   }
 
-  build(props: PriorityStackProps) {
+  build(props: PrioritiStackProps) {
     new PrioritiCdkStack(this.app, 'PrioritiCdkStack', props);
   }
 }

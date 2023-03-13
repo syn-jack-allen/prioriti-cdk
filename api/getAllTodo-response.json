@@ -30,8 +30,7 @@
                 "type": "string"
               },
               "deadline": {
-                "type": "string",
-                "pattern": "^\\\\d{4}\\\\-(0?[1-9]|1[012])\\\\-(0?[1-9]|[12][0-9]|3[01])$"
+                "type": "string"
               },
               "color": {
                 "type": "string",
@@ -51,7 +50,7 @@
         },
         "totalResults": {
           "type": "integer",
-          "minimum": 1
+          "minimum": 0
         }
       },
       "additionalProperties": false

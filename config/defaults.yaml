@@ -1,5 +1,7 @@
 apiGateway:
   jwtIssuer: 'https://dev-5k08t45j1chz5c4k.us.auth0.com/'
+  allowOrigins:
+    - 'http://localhost:3000'
 helloWorldLambda:
   id: 'HelloWorld'
   description: 'Return a simple test response'

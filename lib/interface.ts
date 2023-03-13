@@ -11,6 +11,7 @@ export interface PrioritiLambdaProps {
 
 export interface ApiGatewayProps {
   jwtIssuer: string;
+  allowOrigins: string[];
 }
 
 export interface PrioritiStackProps extends StackProps {

@@ -1,12 +1,9 @@
 {
   "type": "object",
-  "required": ["statusCode", "headers", "body"],
+  "required": ["statusCode", "body"],
   "properties": {
     "statusCode": {
       "type": "integer"
-    },
-    "headers": {
-      "type": "object"
     },
     "body": {
       "type": "object",
@@ -28,8 +25,7 @@
               "type": "string"
             },
             "deadline": {
-              "type": "string",
-              "pattern": "^\\\\d{4}\\\\-(0?[1-9]|1[012])\\\\-(0?[1-9]|[12][0-9]|3[01])$"
+              "type": "string"
             },
             "color": {
               "type": "string",

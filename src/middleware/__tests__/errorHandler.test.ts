@@ -1,5 +1,5 @@
-import { errorHandler, defaultOptions } from '../errorHandler';
 import middy from '@middy/core';
+import { defaultOptions, errorHandler } from '../errorHandler';
 
 describe('errorHandler', () => {
   const errorhandler = errorHandler();
@@ -13,11 +13,8 @@ describe('errorHandler', () => {
 
     expect(request.response).toMatchObject({
       statusCode: 500,
-      body: JSON.stringify({
+      body: {
         error: { message: defaultOptions.fallbackMessage }
-      }),
-      headers: {
-        'Content-Type': 'application/json'
       }
     });
   });
@@ -34,11 +31,8 @@ describe('errorHandler', () => {
 
     expect(request.response).toMatchObject({
       statusCode: 400,
-      body: JSON.stringify({
+      body: {
         error: { message: 'Some runtime error' }
-      }),
-      headers: {
-        'Content-Type': 'application/json'
       }
     });
   });
@@ -54,11 +48,8 @@ describe('errorHandler', () => {
 
     expect(request.response).toMatchObject({
       statusCode: 500,
-      body: JSON.stringify({
+      body: {
         error: { message: defaultOptions.fallbackMessage }
-      }),
-      headers: {
-        'Content-Type': 'application/json'
       }
     });
   });
@@ -79,11 +70,8 @@ describe('errorHandler', () => {
 
     expect(request.response).toMatchObject({
       statusCode: 500,
-      body: JSON.stringify({
+      body: {
         error: { message: 'Custom response' }
-      }),
-      headers: {
-        'Content-Type': 'application/json'
       }
     });
   });

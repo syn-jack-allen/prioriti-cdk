@@ -34,7 +34,7 @@ function httpLogger(errorHandlerOptions?: LoggerOptions) {
     if (error)
       options.logger.error(error.message, { error: serializeError(error) });
 
-    // log final response to client
+    // log the response that the client receives
     const response = request.response;
     if (response)
       options.logger.info('Final lambda response', {
@@ -44,7 +44,7 @@ function httpLogger(errorHandlerOptions?: LoggerOptions) {
   };
 
   const after = (request: middy.Request) => {
-    // log final response to client
+    // log the response that the client receives
     const response = request.response;
     if (response)
       options.logger.info('Final lambda response', {
