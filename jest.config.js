@@ -1,9 +1,13 @@
 module.exports = {
-  preset: 'ts-jest',
+  setupFiles: ['./setupJest.js'],
   testEnvironment: 'node',
   testMatch: ['**/*.test.ts'],
+  clearMocks: true,
   transform: {
-    '^.+\\.tsx?$': 'ts-jest'
+    '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\.jsx?$': 'babel-jest'
   },
-  transformIgnorePatterns: ['./node_modules/@middy/']
+  transformIgnorePatterns: [
+    'node_modules/(?!' + ['serialize-error'].join('|') + ')'
+  ]
 };
