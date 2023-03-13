@@ -5,21 +5,20 @@ import jsonBodyParser from '@middy/http-json-body-parser';
 import httpResponseSerializer from '@middy/http-response-serializer';
 import validator from '@middy/validator';
 import { APIGatewayProxyEventV2WithJWTAuthorizer, Context } from 'aws-lambda';
-import { DynamoDB } from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
-import eventSchema from '../../../../api/postTodo-event.json';
-import { logger } from '../../../constants';
-import { PostTodoResponse, Todo } from '../../../interfaces/Todo';
-import { errorHandler } from '../../../middleware/errorHandler';
-import { httpLogger } from '../../../middleware/httpLogger';
-import { HttpError } from '../../errors';
-import isUserId from '../isUserId';
-import { TodoProvider } from '../todo';
+import eventSchema from '../../../api/postTodo-event.json';
+import { logger } from '../../constants';
+import { dynamodbClient } from '../../dynamodbClient';
+import { PostTodoResponse, Todo } from '../../interfaces/Todo';
+import { errorHandler } from '../../middleware/errorHandler';
+import { httpLogger } from '../../middleware/httpLogger';
+import { HttpError } from '../errors';
 import { getEnvironmentVars } from './getEnvironmentVars';
+import isUserId from './isUserId';
+import { TodoProvider } from './todo';
 
-const dynamodb = new DynamoDB({ apiVersion: '2012-08-10' });
-const envVars = getEnvironmentVars();
-const todoProvider = new TodoProvider(dynamodb, envVars.TODO_TABLE_NAME);
+const { TODO_TABLE_NAME } = getEnvironmentVars();
+const todoProvider = new TodoProvider(dynamodbClient, TODO_TABLE_NAME);
 
 interface RequestBody {
   summary: string;

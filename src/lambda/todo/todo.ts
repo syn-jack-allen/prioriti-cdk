@@ -1,4 +1,4 @@
-import DynamoDB, { AttributeMap } from 'aws-sdk/clients/dynamodb';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { validate as validateUuid } from 'uuid';
 import { Todo } from '../../interfaces/Todo';
 import { HttpError } from '../errors';
@@ -23,21 +23,23 @@ export const attributeNameMap = new Map([
  * @throws If the attribute map is missing the SK, Summary or Deadline attributes; if the
  * todo ID cannot be retrieved from the SK, or the aforementioned attributes are not strings
  */
-export const mapDynamoTodo = (attributes: AttributeMap): Todo => {
-  if (!attributes.Summary?.S) throw new Error('Missing summary in todo item');
-  if (!attributes.Deadline?.S) throw new Error('Missing deadline in todo item');
-  if (!attributes.SK?.S) throw new Error('Missing sort key in todo item');
+export const mapDynamoTodo = (
+  attributes: DocumentClient.AttributeMap
+): Todo => {
+  if (!attributes.Summary) throw new Error('Missing summary in todo item');
+  if (!attributes.Deadline) throw new Error('Missing deadline in todo item');
+  if (!attributes.SK) throw new Error('Missing sort key in todo item');
 
-  const [, id] = attributes.SK.S.split('#');
+  const [, id] = attributes.SK.split('#');
 
   if (!id) throw new Error('Missing todo ID in todo item');
 
   return {
     id,
-    summary: attributes.Summary.S,
-    deadline: attributes.Deadline.S,
-    description: attributes.Description?.S || '',
-    color: attributes.Color?.S || 'red'
+    summary: attributes.Summary,
+    deadline: attributes.Deadline,
+    description: attributes.Description || '',
+    color: attributes.Color || 'red'
   };
 };
 
@@ -48,30 +50,30 @@ export const mapDynamoTodo = (attributes: AttributeMap): Todo => {
  *
  * @throws If the todo ID is an invalid UUID, or the summary or deadline properties are empty
  */
-export const mapTodoDynamo = (todo: Todo): AttributeMap => {
+export const mapTodoDynamo = (todo: Todo): DocumentClient.AttributeMap => {
   if (!validateUuid(todo.id))
     throw new Error(`Todo ID is not a valid UUID format`);
 
   if (!todo.summary) throw new Error('Todo summary cannot be empty');
   if (!todo.deadline) throw new Error('Todo deadline cannot be empty');
 
-  const map: AttributeMap = { SK: { S: `TODO#${todo.id}` } };
+  const map: DocumentClient.AttributeMap = { SK: `TODO#${todo.id}` };
 
-  if (todo.summary) map.Summary = { S: todo.summary };
-  if (todo.description) map.Description = { S: todo.description };
-  if (todo.deadline) map.Deadline = { S: todo.deadline };
-  if (todo.color) map.Color = { S: todo.color };
+  if (todo.summary) map.Summary = todo.summary;
+  if (todo.description) map.Description = todo.description;
+  if (todo.deadline) map.Deadline = todo.deadline;
+  if (todo.color) map.Color = todo.color;
 
   return map;
 };
 
 export class TodoProvider {
-  dynamodb: DynamoDB;
+  dynamodbClient: DocumentClient;
 
   tableName: string;
 
-  constructor(dynamodb: DynamoDB, tableName: string) {
-    this.dynamodb = dynamodb;
+  constructor(dynamodbClient: DocumentClient, tableName: string) {
+    this.dynamodbClient = dynamodbClient;
     this.tableName = tableName;
   }
 
@@ -81,16 +83,16 @@ export class TodoProvider {
    * @returns An array of todo objects
    */
   async getAllTodo(userId: string): Promise<Todo[]> {
-    const params: DynamoDB.Types.QueryInput = {
+    const params: DocumentClient.QueryInput = {
       KeyConditionExpression: 'PK = :s AND begins_with (SK, :prefix)',
       ExpressionAttributeValues: {
-        ':s': { S: userId },
-        ':prefix': { S: 'TODO' }
+        ':s': userId,
+        ':prefix': 'TODO'
       },
       TableName: this.tableName
     };
 
-    const result = await this.dynamodb.query(params).promise();
+    const result = await this.dynamodbClient.query(params).promise();
 
     const transformedResults =
       result.Items?.map((item) => mapDynamoTodo(item)).sort((a, b) =>
@@ -108,15 +110,15 @@ export class TodoProvider {
    * that ID
    */
   async getTodo(userId: string, todoId: string): Promise<Todo | undefined> {
-    const params: DynamoDB.Types.GetItemInput = {
+    const params: DocumentClient.GetItemInput = {
       Key: {
-        PK: { S: userId },
-        SK: { S: `TODO#${todoId}` }
+        PK: userId,
+        SK: `TODO#${todoId}`
       },
       TableName: this.tableName
     };
 
-    const result = await this.dynamodb.getItem(params).promise();
+    const result = await this.dynamodbClient.get(params).promise();
 
     if (!result.Item) return undefined;
 
@@ -133,20 +135,20 @@ export class TodoProvider {
    * @param todo
    */
   async postTodo(userId: string, todo: Todo) {
-    const params: DynamoDB.Types.TransactWriteItemsInput = {
+    const params: DocumentClient.TransactWriteItemsInput = {
       TransactItems: [
         {
           Update: {
             Key: {
-              PK: { S: userId },
-              SK: { S: 'META#COUNT' }
+              PK: userId,
+              SK: 'META#COUNT'
             },
             ConditionExpression:
               'attribute_not_exists(CurrentCount) OR CurrentCount < :maxCount',
             UpdateExpression: 'ADD CurrentCount :val',
             ExpressionAttributeValues: {
-              ':val': { N: '1' },
-              ':maxCount': { N: '2' }
+              ':val': 1,
+              ':maxCount': 2
             },
             TableName: this.tableName
           }
@@ -154,24 +156,12 @@ export class TodoProvider {
         {
           Put: {
             Item: {
-              PK: {
-                S: userId
-              },
-              SK: {
-                S: `TODO#${todo.id}`
-              },
-              Summary: {
-                S: todo.summary
-              },
-              Deadline: {
-                S: todo.deadline
-              },
-              Description: {
-                S: todo.description
-              },
-              Color: {
-                S: todo.color
-              }
+              PK: userId,
+              SK: `TODO#${todo.id}`,
+              Summary: todo.summary,
+              Deadline: todo.deadline,
+              Description: todo.description,
+              Color: todo.color
             },
             TableName: this.tableName
           }
@@ -179,7 +169,7 @@ export class TodoProvider {
       ]
     };
 
-    await this.dynamodb.transactWriteItems(params).promise();
+    await this.dynamodbClient.transactWrite(params).promise();
   }
 
   /**
@@ -207,7 +197,7 @@ export class TodoProvider {
     );
 
     const updateExpression = Object.entries(todoUpdate).reduce(
-      (updateExpression, [key, value], index) => {
+      (updateExpression, [key], index) => {
         if (index > 0) updateExpression += ', ';
         updateExpression += `${attributeNameMap.get(key)} = :${key}`;
         return updateExpression;
@@ -215,10 +205,10 @@ export class TodoProvider {
       'SET '
     );
 
-    const params: DynamoDB.Types.UpdateItemInput = {
+    const params: DocumentClient.UpdateItemInput = {
       Key: {
-        PK: { S: userId },
-        SK: { S: `TODO#${todoId}` }
+        PK: userId,
+        SK: `TODO#${todoId}`
       },
       ReturnValues: 'ALL_NEW',
       UpdateExpression: updateExpression,
@@ -227,7 +217,7 @@ export class TodoProvider {
       TableName: this.tableName
     };
 
-    const result = await this.dynamodb.updateItem(params).promise();
+    const result = await this.dynamodbClient.update(params).promise();
 
     if (!result.Attributes)
       throw new Error('Missing attributes in dynamo update result');
@@ -244,17 +234,17 @@ export class TodoProvider {
    * @param todoId
    */
   async deleteTodo(userId: string, todoId: string): Promise<void> {
-    const params: DynamoDB.Types.TransactWriteItemsInput = {
+    const params: DocumentClient.TransactWriteItemsInput = {
       TransactItems: [
         {
           Update: {
             Key: {
-              PK: { S: userId },
-              SK: { S: 'META#COUNT' }
+              PK: userId,
+              SK: 'META#COUNT'
             },
             UpdateExpression: 'ADD CurrentCount :val',
             ExpressionAttributeValues: {
-              ':val': { N: '-1' }
+              ':val': -1
             },
             TableName: this.tableName
           }
@@ -262,12 +252,8 @@ export class TodoProvider {
         {
           Delete: {
             Key: {
-              PK: {
-                S: userId
-              },
-              SK: {
-                S: `TODO#${todoId}`
-              }
+              PK: userId,
+              SK: `TODO#${todoId}`
             },
             ConditionExpression: 'attribute_exists(SK)',
             TableName: this.tableName
@@ -276,6 +262,6 @@ export class TodoProvider {
       ]
     };
 
-    await this.dynamodb.transactWriteItems(params).promise();
+    await this.dynamodbClient.transactWrite(params).promise();
   }
 }

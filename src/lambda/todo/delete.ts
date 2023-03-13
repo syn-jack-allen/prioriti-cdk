@@ -8,18 +8,17 @@ import {
   APIGatewayProxyStructuredResultV2,
   Context
 } from 'aws-lambda';
-import { DynamoDB } from 'aws-sdk';
-import { logger } from '../../../constants';
-import { errorHandler } from '../../../middleware/errorHandler';
-import { httpLogger } from '../../../middleware/httpLogger';
-import { HttpError } from '../../errors';
-import isUserId from '../isUserId';
-import { TodoProvider } from '../todo';
+import { logger } from '../../constants';
+import { dynamodbClient } from '../../dynamodbClient';
+import { errorHandler } from '../../middleware/errorHandler';
+import { httpLogger } from '../../middleware/httpLogger';
+import { HttpError } from '../errors';
 import { getEnvironmentVars } from './getEnvironmentVars';
+import isUserId from './isUserId';
+import { TodoProvider } from './todo';
 
-const dynamodb = new DynamoDB({ apiVersion: '2012-08-10' });
-const envVars = getEnvironmentVars();
-const todoProvider = new TodoProvider(dynamodb, envVars.TODO_TABLE_NAME);
+const { TODO_TABLE_NAME } = getEnvironmentVars();
+const todoProvider = new TodoProvider(dynamodbClient, TODO_TABLE_NAME);
 
 async function baseHandler(
   event: APIGatewayProxyEventV2WithJWTAuthorizer,
