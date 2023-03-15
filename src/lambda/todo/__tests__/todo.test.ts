@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
-import { Todo } from '../interfaces/Todo';
-import { mapDynamoTodo, mapTodoDynamo } from '../lambda/todo/todo';
+import { Todo } from '../../../interfaces/Todo';
+import { mapDynamoTodo, mapTodoDynamo } from '../todo';
 
 describe('Converting dynamo DB items to todo objects', () => {
   test('Works for a correctly formed dynamo DB item', () => {
