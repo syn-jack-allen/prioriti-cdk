@@ -5,7 +5,7 @@ import { getAllTodoEvent } from '../fixtures/getAllTodoEvent';
 
 const mockGetAllTodo = jest.fn().mockResolvedValue([]);
 
-jest.mock('../todo', () => {
+jest.mock('../../todo', () => {
   return {
     TodoProvider: jest.fn().mockImplementation(() => {
       return {

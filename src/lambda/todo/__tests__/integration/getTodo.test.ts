@@ -10,7 +10,7 @@ const mockGetTodo = jest.fn().mockResolvedValue({
   color: 'red'
 });
 
-jest.mock('../todo', () => {
+jest.mock('../../todo', () => {
   return {
     TodoProvider: jest.fn().mockImplementation(function () {
       return {
