@@ -1,19 +1,25 @@
 import { Context } from 'aws-lambda';
 import { v4 as uuid } from 'uuid';
 import { handler } from '../getAll';
-import { mockGetAllTodo } from '../__mocks__/todo';
 import { getAllTodoEvent } from './fixtures/getAllTodoEvent';
-jest.mock('../../lambda/todo/todo');
 
-let event = getAllTodoEvent;
+const mockGetAllTodo = jest.fn().mockResolvedValue([]);
+
+jest.mock('../todo', () => {
+  return {
+    TodoProvider: jest.fn().mockImplementation(() => {
+      return {
+        getAllTodo: (...args: any[]) => mockGetAllTodo(...args)
+      };
+    })
+  };
+});
+
+let event = { ...getAllTodoEvent };
 
 describe('Get all todo lambda', () => {
-  beforeAll(() => {
-    process.env.TODO_TABLE_NAME = 'test';
-  });
-
   beforeEach(() => {
-    event = { ...getAllTodoEvent };
+    event = JSON.parse(JSON.stringify(getAllTodoEvent));
     mockGetAllTodo.mockClear();
   });
 
@@ -27,15 +33,69 @@ describe('Get all todo lambda', () => {
     );
   });
 
+  test('Can respond with multiple todos', async () => {
+    const id = uuid();
+    mockGetAllTodo.mockResolvedValueOnce([
+      {
+        id,
+        summary: 'test-summary',
+        description: 'test-description',
+        deadline: Date.parse('2023-04-05'),
+        color: 'red'
+      }
+    ]);
+
+    const lambdaResponse = await handler(event, {} as Context, () => {});
+
+    expect(lambdaResponse).toEqual(
+      expect.objectContaining({
+        statusCode: 200
+      })
+    );
+
+    expect(JSON.parse((lambdaResponse as any).body)).toEqual(
+      expect.objectContaining({
+        results: [
+          {
+            id,
+            summary: 'test-summary',
+            description: 'test-description',
+            deadline: Date.parse('2023-04-05').toString(),
+            color: 'red'
+          }
+        ]
+      })
+    );
+  });
+
+  test('Missing JWT sub results in unauthenticated error', async () => {
+    event.requestContext.authorizer.jwt.claims.sub = '';
+    const lambdaResponse = await handler(event, {} as Context, () => {});
+
+    expect(lambdaResponse).toEqual(
+      expect.objectContaining({
+        statusCode: 401,
+        body: JSON.stringify({
+          error: { message: 'Unable to authenticate user' }
+        })
+      })
+    );
+  });
+
   describe('Paginates correctly', () => {
     test('For no todos', async () => {
       const lambdaResponse = await handler(event, {} as Context, () => {});
 
       expect(lambdaResponse).toEqual(
         expect.objectContaining({
-          statusCode: 200,
-          pageSize: 1,
+          statusCode: 200
+        })
+      );
+
+      expect(JSON.parse((lambdaResponse as any).body)).toEqual(
+        expect.objectContaining({
           pageNumber: 1,
+          pageSize: 1,
           totalResults: 0
         })
       );
@@ -63,7 +123,12 @@ describe('Get all todo lambda', () => {
 
       expect(lambdaResponse).toEqual(
         expect.objectContaining({
-          statusCode: 200,
+          statusCode: 200
+        })
+      );
+
+      expect(JSON.parse((lambdaResponse as any).body)).toEqual(
+        expect.objectContaining({
           results: expect.arrayContaining([todoA, todoB]),
           pageNumber: 1,
           pageSize: 2,
