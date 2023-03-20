@@ -68,7 +68,7 @@ describe('Get all todo lambda', () => {
     );
   });
 
-  test('Missing JWT sub results in unauthenticated error', async () => {
+  test('Returns 401 if missing JWT claim', async () => {
     event.requestContext.authorizer.jwt.claims.sub = '';
     const lambdaResponse = await handler(event, {} as Context, () => {});
 
