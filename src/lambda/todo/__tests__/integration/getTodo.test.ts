@@ -1,6 +1,6 @@
 import { APIGatewayProxyEventV2WithJWTAuthorizer, Context } from 'aws-lambda';
-import { handler } from '../get';
-import { getTodoEvent } from './fixtures/getTodoEvent';
+import { handler } from '../../get';
+import { getTodoEvent } from '../fixtures/getTodoEvent';
 
 const mockGetTodo = jest.fn().mockResolvedValue({
   id: '185d1ac8-9587-49b8-8095-4aaa5a7d02cf',

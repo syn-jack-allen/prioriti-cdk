@@ -1,7 +1,7 @@
 import { Context } from 'aws-lambda';
 import { v4 as uuid } from 'uuid';
-import { handler } from '../getAll';
-import { getAllTodoEvent } from './fixtures/getAllTodoEvent';
+import { handler } from '../../getAll';
+import { getAllTodoEvent } from '../fixtures/getAllTodoEvent';
 
 const mockGetAllTodo = jest.fn().mockResolvedValue([]);
 
