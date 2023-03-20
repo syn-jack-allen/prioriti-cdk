@@ -1,11 +1,8 @@
+import { AWSError } from 'aws-sdk';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { validate as validateUuid } from 'uuid';
 import { Todo } from '../../interfaces/Todo';
 import { HttpError } from '../errors';
-
-interface ProviderFailure {
-  error: HttpError;
-}
 
 // maps todo object properties to their attribute names in DynamoDB
 export const attributeNameMap = new Map([
@@ -134,7 +131,7 @@ export class TodoProvider {
    * @param userId
    * @param todo
    */
-  async postTodo(userId: string, todo: Todo) {
+  async postTodo(userId: string, todo: Todo): Promise<void> {
     const params: DocumentClient.TransactWriteItemsInput = {
       TransactItems: [
         {
@@ -169,7 +166,21 @@ export class TodoProvider {
       ]
     };
 
-    await this.dynamodbClient.transactWrite(params).promise();
+    try {
+      await this.dynamodbClient.transactWrite(params).promise();
+    } catch (err) {
+      if (!(err instanceof Error)) throw err;
+
+      if ((err as AWSError).code === 'TransactionCanceledException') {
+        throw new HttpError(
+          402,
+          'You have reached the maximum number of todos',
+          err
+        );
+      }
+
+      throw err;
+    }
   }
 
   /**
@@ -190,7 +201,7 @@ export class TodoProvider {
   ): Promise<Todo> {
     const expressionAttributeValues = Object.entries(todoUpdate).reduce(
       (expressionAttributeValues, [key, value]) => {
-        expressionAttributeValues[`:${key}`] = { S: value };
+        expressionAttributeValues[`:${key}`] = value;
         return expressionAttributeValues;
       },
       {} as any
