@@ -4,6 +4,7 @@ import httpHeaderNormalizer from '@middy/http-header-normalizer';
 import jsonBodyParser from '@middy/http-json-body-parser';
 import httpResponseSerializer from '@middy/http-response-serializer';
 import validator from '@middy/validator';
+import { transpileSchema } from '@middy/validator/transpile';
 import { APIGatewayProxyEventV2WithJWTAuthorizer, Context } from 'aws-lambda';
 import { v4 as uuid } from 'uuid';
 import eventSchema from '../../../api/postTodo-event.json';
@@ -51,30 +52,16 @@ async function baseHandler(
     color: body.color || 'red'
   };
 
-  try {
-    await todoProvider.postTodo(userId, todo);
+  await todoProvider.postTodo(userId, todo);
 
-    logger.info(`Created new todo with id ${todoId} for ${userId}`);
+  logger.info(`Created new todo with id ${todoId} for ${userId}`);
 
-    return {
-      statusCode: 200,
-      body: {
-        todoId
-      }
-    };
-  } catch (error) {
-    // for TS's sake
-    if (!(error instanceof Error)) throw error;
-
-    if (error.name === 'TransactionCanceledException')
-      throw new HttpError(
-        402,
-        'You have reached the maximum number of todo items',
-        error
-      );
-
-    throw error;
-  }
+  return {
+    statusCode: 200,
+    body: {
+      todoId
+    }
+  };
 }
 
 const handler = middy(baseHandler)
@@ -96,7 +83,7 @@ const handler = middy(baseHandler)
   .use(jsonBodyParser())
   // normalizes all headers to Canonical-Format
   .use(httpHeaderNormalizer())
-  .use(validator({ eventSchema }))
+  .use(validator({ eventSchema: transpileSchema(eventSchema) }))
   .use(httpLogger({ logger }))
   .use(errorHandler());
 

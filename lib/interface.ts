@@ -15,7 +15,6 @@ export interface ApiGatewayProps {
 }
 
 export interface PrioritiStackProps extends StackProps {
-  helloWorldLambda: PrioritiLambdaProps;
   getTodoLambdaProps: PrioritiLambdaProps;
   getAllTodoLambdaProps: PrioritiLambdaProps;
   deleteTodoLambdaProps: PrioritiLambdaProps;

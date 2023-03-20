@@ -4,6 +4,7 @@ import httpHeaderNormalizer from '@middy/http-header-normalizer';
 import jsonBodyParser from '@middy/http-json-body-parser';
 import httpResponseSerializer from '@middy/http-response-serializer';
 import validator from '@middy/validator';
+import { transpileSchema } from '@middy/validator/transpile';
 import { APIGatewayProxyEventV2WithJWTAuthorizer, Context } from 'aws-lambda';
 import eventSchema from '../../../api/putTodo-event.json';
 import { logger } from '../../constants';
@@ -81,7 +82,7 @@ const handler = middy(baseHandler)
   .use(jsonBodyParser())
   // normalizes all headers to Canonical-Format
   .use(httpHeaderNormalizer())
-  .use(validator({ eventSchema }))
+  .use(validator({ eventSchema: transpileSchema(eventSchema) }))
   .use(errorHandler())
   .use(httpLogger({ logger }));
 
