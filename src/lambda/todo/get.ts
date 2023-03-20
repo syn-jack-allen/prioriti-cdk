@@ -3,6 +3,7 @@ import httpEventNormalizer from '@middy/http-event-normalizer';
 import httpHeaderNormalizer from '@middy/http-header-normalizer';
 import httpResponseSerializer from '@middy/http-response-serializer';
 import validator from '@middy/validator';
+import { transpileSchema } from '@middy/validator/transpile';
 import { APIGatewayProxyEventV2WithJWTAuthorizer, Context } from 'aws-lambda';
 import responseSchema from '../../../api/getTodo-response.json';
 import { logger } from '../../constants';
@@ -60,7 +61,7 @@ const handler = middy(baseHandler)
   .use(httpEventNormalizer())
   // normalizes all headers to Canonical-Format
   .use(httpHeaderNormalizer())
-  .use(validator({ responseSchema }))
+  .use(validator({ responseSchema: transpileSchema(responseSchema) }))
 
   .use(errorHandler())
   .use(httpLogger({ logger }));

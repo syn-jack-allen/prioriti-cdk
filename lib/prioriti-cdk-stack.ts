@@ -73,9 +73,6 @@ export class PrioritiCdkStack extends Stack {
       certificate
     });
 
-    const helloWorldLambdaProps = props.helloWorldLambda;
-    const helloWorldLambda = createNodeJsFunction(this, helloWorldLambdaProps);
-
     const getTodoLambdaProps = props.getTodoLambdaProps;
     const getTodoLambda = createNodeJsFunction(this, getTodoLambdaProps, {
       TODO_TABLE_NAME: todoTable.tableName
@@ -106,12 +103,6 @@ export class PrioritiCdkStack extends Stack {
     todoTable.grantReadWriteData(deleteTodoLambda);
     todoTable.grantReadWriteData(putTodoLambda);
     todoTable.grantReadWriteData(postTodoLambda);
-
-    const helloWorldLambdaIntegration = new HttpLambdaIntegration(
-      'HelloWorldIntegration',
-      helloWorldLambda,
-      { payloadFormatVersion: PayloadFormatVersion.VERSION_2_0 }
-    );
 
     const getAllTodoLambdaIntegration = new HttpLambdaIntegration(
       `${getAllTodoLambdaProps.id}Integration`,
@@ -173,12 +164,6 @@ export class PrioritiCdkStack extends Stack {
       domainMapping: {
         domainName
       }
-    });
-
-    api.addRoutes({
-      integration: helloWorldLambdaIntegration,
-      path: '/helloworld',
-      methods: [HttpMethod.GET]
     });
 
     api.addRoutes({

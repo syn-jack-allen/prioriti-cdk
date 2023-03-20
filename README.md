@@ -17,13 +17,16 @@ Since I won't be carrying my tower PC around with me throughout the day, there a
 
 Hopefully, this README will be updated as the project progresses.
 
-## Useful commands
+## Updates
 
-- `npm run test` perform the jest unit tests
-- `cdk deploy` deploy this stack to your default AWS account/region
-- `cdk diff` compare deployed stack with current state
-- `cdk synth` emits the synthesized CloudFormation template
+### March 2023
 
-## Deploying
+Currently have lambdas for all endpoints implemented in `src/lambda/todo`. Each endpoint is fully integrated with DynamoDB. A maximum number of todos has been configured to prevent malicious intent which is enforced by DynamoDB transaction writes.
 
-To deploy, run `cdk deploy`. This will use the configuration under the profile named 'personal'.
+We have middlewares configured for JWT validation so API is fully secured against unwanted visitors.
+
+Next steps:
+
+- Complete integration tests for each endpoint
+- Complete E2E tests for each endpoint
+- Extract interfaces into a separate repository
