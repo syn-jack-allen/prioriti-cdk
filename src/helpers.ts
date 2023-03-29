@@ -3,6 +3,8 @@ import { load } from 'js-yaml';
 
 /**
  * Reads a YAML file and returns it as a JavaScript object.
+ *
+ * Lint test
  * @param file
  * @returns
  */
