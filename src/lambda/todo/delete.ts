@@ -33,15 +33,7 @@ async function baseHandler(
 
   if (!todoId) throw new HttpError(404, 'Unable to get todo ID');
 
-  try {
-    await todoProvider.deleteTodo(userId, todoId);
-  } catch (error) {
-    // for TS's sake
-    if (!(error instanceof Error)) throw error;
-
-    // don't throw cancelled transaction errors
-    if (error.name !== 'TransactionCanceledException') throw error;
-  }
+  await todoProvider.deleteTodo(userId, todoId);
 
   return {
     statusCode: 200

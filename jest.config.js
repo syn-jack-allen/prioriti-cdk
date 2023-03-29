@@ -1,7 +1,7 @@
 module.exports = {
   setupFiles: ['./setupJest.js'],
   testEnvironment: 'node',
-  testMatch: ['**/*.test.ts'],
+  testMatch: ['**/__tests__/*.test.ts'],
   clearMocks: true,
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
