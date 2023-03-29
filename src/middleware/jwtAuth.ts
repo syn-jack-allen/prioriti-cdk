@@ -67,7 +67,6 @@ function jwtAuth(jwtAuthOptions?: JWTAuthOptions) {
 
       // decode payload from JWT token
       const payload = decode(token);
-      console.log(payload);
 
       // ensure payload contains a permissions property
       if (!isPermissionsPayload(payload)) {

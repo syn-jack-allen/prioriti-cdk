@@ -65,6 +65,8 @@ async function baseHandler(
 }
 
 const handler = middy(baseHandler)
+  // normalizes all headers to Canonical-Format
+  .use(httpHeaderNormalizer())
   // parses JSON string from JS object body
   .use(
     httpResponseSerializer({
@@ -81,8 +83,6 @@ const handler = middy(baseHandler)
   .use(httpEventNormalizer())
   // parses JSON from string body
   .use(jsonBodyParser())
-  // normalizes all headers to Canonical-Format
-  .use(httpHeaderNormalizer())
   .use(validator({ eventSchema: transpileSchema(eventSchema) }))
   .use(httpLogger({ logger }))
   .use(errorHandler());
