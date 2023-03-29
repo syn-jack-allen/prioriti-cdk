@@ -6,12 +6,7 @@ import {
 } from '@aws-cdk/aws-apigatewayv2-alpha';
 import { HttpJwtAuthorizer } from '@aws-cdk/aws-apigatewayv2-authorizers-alpha';
 import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import {
-  Duration,
-  RemovalPolicy,
-  ResourceEnvironment,
-  Stack
-} from 'aws-cdk-lib';
+import { Duration, RemovalPolicy, Stack } from 'aws-cdk-lib';
 import { DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
@@ -49,12 +44,6 @@ export class PrioritiCdkStack extends Stack {
       billingMode: BillingMode.PAY_PER_REQUEST,
       removalPolicy: RemovalPolicy.DESTROY
     });
-
-    // get account and region
-    const resourceEnvironment: ResourceEnvironment = {
-      account: this.account,
-      region: this.region
-    };
 
     // get hosted zone that our domain name is in
     const hostedZone = HostedZone.fromLookup(this, 'HostedZone', {
@@ -154,7 +143,7 @@ export class PrioritiCdkStack extends Stack {
       }
     });
 
-    const devStage = api.addStage('dev', {
+    api.addStage('dev', {
       autoDeploy: true,
       stageName: 'dev',
       throttle: {

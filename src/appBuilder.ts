@@ -16,7 +16,7 @@ const defaultOptions: IAppBuilderOptions = {
   devConfigFile: 'dev.yaml'
 };
 
-export default class<T> {
+export default class {
   app: App;
 
   private options: IAppBuilderOptions;

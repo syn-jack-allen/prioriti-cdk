@@ -5,7 +5,7 @@ import jsonBodyParser from '@middy/http-json-body-parser';
 import httpResponseSerializer from '@middy/http-response-serializer';
 import validator from '@middy/validator';
 import { transpileSchema } from '@middy/validator/transpile';
-import { APIGatewayProxyEventV2WithJWTAuthorizer, Context } from 'aws-lambda';
+import { APIGatewayProxyEventV2WithJWTAuthorizer } from 'aws-lambda';
 import { v4 as uuid } from 'uuid';
 import eventSchema from '../../../api/postTodo-event.json';
 import { logger } from '../../constants';
@@ -29,8 +29,7 @@ interface RequestBody {
 }
 
 async function baseHandler(
-  event: APIGatewayProxyEventV2WithJWTAuthorizer,
-  context: Context
+  event: APIGatewayProxyEventV2WithJWTAuthorizer
 ): Promise<PostTodoResponse> {
   const userId = event.requestContext.authorizer.jwt.claims.sub;
 
