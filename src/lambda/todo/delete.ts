@@ -5,8 +5,7 @@ import jsonBodyParser from '@middy/http-json-body-parser';
 import httpResponseSerializer from '@middy/http-response-serializer';
 import {
   APIGatewayProxyEventV2WithJWTAuthorizer,
-  APIGatewayProxyStructuredResultV2,
-  Context
+  APIGatewayProxyStructuredResultV2
 } from 'aws-lambda';
 import { logger } from '../../constants';
 import { dynamodbClient } from '../../dynamodbClient';
@@ -21,8 +20,7 @@ const { TODO_TABLE_NAME } = getEnvironmentVars();
 const todoProvider = new TodoProvider(dynamodbClient, TODO_TABLE_NAME);
 
 async function baseHandler(
-  event: APIGatewayProxyEventV2WithJWTAuthorizer,
-  context: Context
+  event: APIGatewayProxyEventV2WithJWTAuthorizer
 ): Promise<APIGatewayProxyStructuredResultV2> {
   const userId = event.requestContext.authorizer.jwt.claims.sub;
 

@@ -4,7 +4,7 @@ import httpHeaderNormalizer from '@middy/http-header-normalizer';
 import httpResponseSerializer from '@middy/http-response-serializer';
 import validator from '@middy/validator';
 import { transpileSchema } from '@middy/validator/transpile';
-import { APIGatewayProxyEventV2WithJWTAuthorizer, Context } from 'aws-lambda';
+import { APIGatewayProxyEventV2WithJWTAuthorizer } from 'aws-lambda';
 import responseSchema from '../../../api/getTodo-response.json';
 import { logger } from '../../constants';
 import { dynamodbClient } from '../../dynamodbClient';
@@ -20,8 +20,7 @@ const { TODO_TABLE_NAME } = getEnvironmentVars();
 const todoProvider = new TodoProvider(dynamodbClient, TODO_TABLE_NAME);
 
 async function baseHandler(
-  event: APIGatewayProxyEventV2WithJWTAuthorizer,
-  context: Context
+  event: APIGatewayProxyEventV2WithJWTAuthorizer
 ): Promise<GetTodoResponse> {
   const userId = event.requestContext.authorizer.jwt.claims.sub;
 

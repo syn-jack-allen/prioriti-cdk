@@ -1,7 +1,7 @@
 import middy from '@middy/core';
-import { APIGatewayEvent, Context } from 'aws-lambda';
+import { APIGatewayEvent } from 'aws-lambda';
 
-async function baseHandler(event: APIGatewayEvent, context: Context) {
+async function baseHandler(event: APIGatewayEvent) {
   return {
     statusCode: 200,
     headers: {

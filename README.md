@@ -1,3 +1,10 @@
+<a href="https://gitmoji.dev">
+  <img
+    src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square"
+    alt="Gitmoji"
+  />
+</a>
+
 # Welcome to the Prioriti project
 
 This repo is intended to demonstrate professional DevOps practices that take a project from conception all the way to production.

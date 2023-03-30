@@ -1,0 +1,1 @@
+process.env.TODO_TABLE_NAME = 'test';
